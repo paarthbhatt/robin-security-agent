@@ -45,5 +45,9 @@ Run ROBIN in interactive mode:
 bun start
 ```
 
+## 🦞 OpenClaw Integration
+
+ROBIN can be integrated into your OpenClaw ecosystem as a specialized security agent. For detailed setup instructions, see [OPENCLAW.md](./OPENCLAW.md).
+
 ---
 *Created by Parth Bhatt. Inspired by Dexter.*
