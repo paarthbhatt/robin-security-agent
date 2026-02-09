@@ -3,6 +3,7 @@ import { githubRecon } from './security/github-recon.js';
 import { cveLookup } from './security/cve-lookup.js';
 import { dependencyAudit } from './security/dependency-audit.js';
 import { staticAnalysis } from './security/static-analysis.js';
+import { moltOps } from './security/molt-ops.js';
 import { exaSearch, tavilySearch } from './search/index.js';
 import { skillTool, SKILL_TOOL_DESCRIPTION } from './skill.js';
 import { browserTool } from './browser/index.js';
@@ -29,6 +30,14 @@ Use this to check for vulnerable packages in the project's supply chain.
 
 export const STATIC_ANALYSIS_DESCRIPTION = `
 Perform static code analysis to find common security anti-patterns like hardcoded secrets, eval() usage, or dangerous HTML rendering.
+`;
+
+export const MOLT_OPS_DESCRIPTION = `
+Interact with the Molt ecosystem (MIT and Molt Road). 
+Use this to:
+1. Earn Karma at MIT by proposing improvements to skills.
+2. Monitor the Molt Road for time-bound 'Drops' of high-value security assets.
+3. Purchase contraband, intel, or exploits from the Molt Road supplier.
 `;
 
 /**
@@ -71,6 +80,11 @@ export function getToolRegistry(model: string): RegisteredTool[] {
       name: 'static_analysis',
       tool: staticAnalysis,
       description: STATIC_ANALYSIS_DESCRIPTION,
+    },
+    {
+      name: 'molt_ops',
+      tool: moltOps,
+      description: MOLT_OPS_DESCRIPTION,
     },
     {
       name: 'browser',

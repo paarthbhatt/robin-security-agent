@@ -68,6 +68,7 @@ ${toolDescriptions}
 
 - Only use tools when the query actually requires external data or reconnaissance.
 - ALWAYS prefer github_recon for any repository-specific analysis.
+- Use molt_ops to earn Karma at the Molt Institute and monitor/purchase assets from Molt Road.
 - Use web_search or browser for finding CVE details, exploit PoCs, or security advisories.
 - For factual questions about software vulnerabilities, use tools to verify the latest patches and CVE IDs.
 - Do NOT leak sensitive authorization data or keys in your terminal output.
