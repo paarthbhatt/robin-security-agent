@@ -10,10 +10,16 @@ export function getToolDescription(toolName: string, args: Record<string, unknow
   const parts: string[] = [];
   const usedKeys = new Set<string>();
 
-  // Add ticker if present (most common identifier)
-  if (args.ticker) {
-    parts.push(String(args.ticker).toUpperCase());
-    usedKeys.add('ticker');
+  // Add repo if present (common for security tools)
+  if (args.repo) {
+    parts.push(`Repo: ${args.repo}`);
+    usedKeys.add('repo');
+  }
+
+  // Add CVE ID if present
+  if (args.cveId) {
+    parts.push(String(args.cveId).toUpperCase());
+    usedKeys.add('cveId');
   }
 
   // Add search query if present
@@ -22,30 +28,18 @@ export function getToolDescription(toolName: string, args: Record<string, unknow
     usedKeys.add('query');
   }
 
-  // Format tool name: get_income_statements -> income statements
+  // Format tool name
   const formattedToolName = toolName
-    .replace(/^get_/, '')
-    .replace(/^search_/, '')
+    .replace(/^github_/, '')
+    .replace(/^cve_/, '')
     .replace(/_/g, ' ');
   parts.push(formattedToolName);
 
-  // Add period qualifier if present
-  if (args.period) {
-    parts.push(`(${args.period})`);
-    usedKeys.add('period');
-  }
-
-  // Add limit if present
-  if (args.limit && typeof args.limit === 'number') {
-    parts.push(`- ${args.limit} periods`);
-    usedKeys.add('limit');
-  }
-
-  // Add date range if present
-  if (args.start_date && args.end_date) {
-    parts.push(`from ${args.start_date} to ${args.end_date}`);
-    usedKeys.add('start_date');
-    usedKeys.add('end_date');
+  // Add path qualifier if present
+  if (args.path || args.repoPath) {
+    parts.push(`at ${args.path || args.repoPath}`);
+    usedKeys.add('path');
+    usedKeys.add('repoPath');
   }
 
   // Append any remaining args not explicitly handled
