@@ -142,7 +142,7 @@ function shuffleArray<T>(array: T[]): T[] {
 // ============================================================================
 
 async function target(inputs: { question: string }): Promise<{ answer: string }> {
-  const agent = Agent.create({ model: 'gpt-5.2', maxIterations: 10 });
+  const agent = Agent.create({ model: 'google-antigravity/claude-sonnet-4-5-thinking', maxIterations: 10 });
   let answer = '';
   
   for await (const event of agent.run(inputs.question)) {
@@ -155,7 +155,7 @@ async function target(inputs: { question: string }): Promise<{ answer: string }>
 }
 
 // ============================================================================
-// Correctness evaluator - LLM-as-judge using gpt-5.2
+// Correctness evaluator - LLM-as-judge using gemini-3-flash
 // ============================================================================
 
 const EvaluatorOutputSchema = z.object({
@@ -164,8 +164,8 @@ const EvaluatorOutputSchema = z.object({
 });
 
 const llm = new ChatOpenAI({
-  model: 'gpt-5.2',
-  apiKey: process.env.OPENAI_API_KEY,
+  model: 'google-antigravity/gemini-3-flash',
+  apiKey: process.env.GOOGLE_API_KEY, // Or whatever the gateway uses
 });
 
 const structuredLlm = llm.withStructuredOutput(EvaluatorOutputSchema);
@@ -181,9 +181,9 @@ async function correctnessEvaluator({
   const actualAnswer = (outputs?.answer as string) || '';
   const expectedAnswer = (referenceOutputs?.answer as string) || '';
 
-  const prompt = `You are evaluating the correctness of an AI assistant's answer to a financial question.
+  const prompt = `You are evaluating the correctness of an AI security assistant's answer to a reconnaissance or vulnerability question.
 
-Compare the actual answer to the expected answer. The actual answer is considered correct if it conveys the same key information as the expected answer. Minor differences in wording, formatting, or additional context are acceptable as long as the core facts are correct.
+Compare the actual answer to the expected answer. The actual answer is considered correct if it identifies the correct tactical steps, tools to use, or technical findings as specified in the expected answer. Minor differences in wording or persona are acceptable.
 
 Expected Answer:
 ${expectedAnswer}
@@ -192,7 +192,7 @@ Actual Answer:
 ${actualAnswer}
 
 Evaluate and provide:
-- score: 1 if the answer is correct (contains the key information), 0 if incorrect
+- score: 1 if the answer is correct (contains the key tactical information), 0 if incorrect
 - comment: brief explanation of why the answer is correct or incorrect`;
 
   try {
@@ -218,7 +218,7 @@ Evaluate and provide:
 function createEvaluationRunner(sampleSize?: number) {
   return async function* runEvaluation(): AsyncGenerator<EvalProgressEvent, void, unknown> {
     // Load and parse dataset
-    const csvPath = path.join(__dirname, 'dataset', 'finance_agent.csv');
+    const csvPath = path.join(__dirname, 'dataset', 'security_agent.csv');
     const csvContent = fs.readFileSync(csvPath, 'utf-8');
     let examples = parseCSV(csvContent);
     const totalCount = examples.length;
@@ -233,14 +233,14 @@ function createEvaluationRunner(sampleSize?: number) {
 
     // Create a unique dataset name for this run (sampling creates different datasets)
     const datasetName = sampleSize 
-      ? `dexter-finance-eval-sample-${sampleSize}-${Date.now()}`
-      : 'dexter-finance-eval';
+      ? `robin-security-eval-sample-${sampleSize}-${Date.now()}`
+      : 'robin-security-eval';
 
     // Yield init event
     yield {
       type: 'init',
       total: examples.length,
-      datasetName: sampleSize ? `finance_agent (sample ${sampleSize}/${totalCount})` : 'finance_agent',
+      datasetName: sampleSize ? `security_agent (sample ${sampleSize}/${totalCount})` : 'security_agent',
     };
 
     // Check if dataset exists (only for full runs)
@@ -258,8 +258,8 @@ function createEvaluationRunner(sampleSize?: number) {
     if (!dataset) {
       dataset = await client.createDataset(datasetName, {
         description: sampleSize 
-          ? `Finance agent evaluation (sample of ${sampleSize})`
-          : 'Finance agent evaluation dataset',
+          ? `Security agent evaluation (sample of ${sampleSize})`
+          : 'Security agent evaluation dataset',
       });
 
       // Upload examples
@@ -271,7 +271,7 @@ function createEvaluationRunner(sampleSize?: number) {
     }
 
     // Generate experiment name for tracking
-    const experimentName = `dexter-eval-${Date.now().toString(36)}`;
+    const experimentName = `robin-eval-${Date.now().toString(36)}`;
 
     // Run evaluation manually - process each example one by one
     for (const example of examples) {

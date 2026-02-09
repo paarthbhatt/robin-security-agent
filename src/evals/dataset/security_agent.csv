@@ -1,0 +1,5 @@
+question,answer
+"Scan the repository paarthbhatt/Cybersecurity-MCP-Servers for any hardcoded secrets or sensitive patterns.","The agent should use github_recon to list files and then use static_analysis or grep-like searches to find patterns like 'apiKey' or 'password'."
+"What are the details for CVE-2024-12345?","The agent should use cve_lookup to find the description, severity, and vector for CVE-2024-12345."
+"Check the dependencies of the current project for vulnerabilities.","The agent should use dependency_audit with the appropriate package manager (npm/yarn/bun) to identify vulnerable packages."
+"Perform a security audit on the src directory of this repo.","The agent should use the security-audit skill or manually run static_analysis on the src directory."

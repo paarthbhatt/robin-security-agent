@@ -12,8 +12,8 @@ import { z } from 'zod';
 import { DEFAULT_SYSTEM_PROMPT } from '@/agent/prompts';
 import type { TokenUsage } from '../agent/types.js';
 
-export const DEFAULT_PROVIDER = 'openai';
-export const DEFAULT_MODEL = 'gpt-5.2';
+export const DEFAULT_PROVIDER = 'google-antigravity';
+export const DEFAULT_MODEL = 'google-antigravity/claude-sonnet-4-5-thinking';
 
 // Fast model variants by provider for lightweight tasks like summarization
 const FAST_MODELS: Record<string, string> = {
@@ -90,6 +90,15 @@ const MODEL_PROVIDERS: Record<string, ModelFactory> = {
       apiKey: getApiKey('OPENROUTER_API_KEY', 'OpenRouter'),
       configuration: {
         baseURL: 'https://openrouter.ai/api/v1',
+      },
+    }),
+  'google-antigravity/': (name, opts) =>
+    new ChatOpenAI({
+      model: name,
+      ...opts,
+      apiKey: process.env.OPENCLAW_TOKEN || 'no-token',
+      configuration: {
+        baseURL: process.env.OPENCLAW_GATEWAY_URL ? `${process.env.OPENCLAW_GATEWAY_URL}/v1` : 'http://127.0.0.1:18789/v1',
       },
     }),
   'kimi-': (name, opts) =>

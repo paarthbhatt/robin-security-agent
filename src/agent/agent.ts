@@ -32,8 +32,8 @@ export class Agent {
     tools: StructuredToolInterface[],
     systemPrompt: string
   ) {
-    this.model = config.model ?? 'gpt-5.2';
-    this.modelProvider = config.modelProvider ?? 'openai';
+    this.model = config.model ?? 'google-antigravity/claude-sonnet-4-5-thinking';
+    this.modelProvider = config.modelProvider ?? 'google-antigravity';
     this.maxIterations = config.maxIterations ?? DEFAULT_MAX_ITERATIONS;
     this.tools = tools;
     this.toolMap = new Map(tools.map(t => [t.name, t]));
@@ -45,7 +45,7 @@ export class Agent {
    * Create a new Agent instance with tools.
    */
   static create(config: AgentConfig = {}): Agent {
-    const model = config.model ?? 'gpt-5.2';
+    const model = config.model ?? 'google-antigravity/claude-sonnet-4-5-thinking';
     const tools = getTools(model);
     const systemPrompt = buildSystemPrompt(model);
     return new Agent(config, tools, systemPrompt);
