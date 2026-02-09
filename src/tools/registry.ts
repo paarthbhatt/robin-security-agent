@@ -1,6 +1,8 @@
 import { StructuredToolInterface } from '@langchain/core/tools';
 import { githubRecon } from './security/github-recon.js';
 import { cveLookup } from './security/cve-lookup.js';
+import { dependencyAudit } from './security/dependency-audit.js';
+import { staticAnalysis } from './security/static-analysis.js';
 import { exaSearch, tavilySearch } from './search/index.js';
 import { skillTool, SKILL_TOOL_DESCRIPTION } from './skill.js';
 import { browserTool } from './browser/index.js';
@@ -18,6 +20,15 @@ Use this to:
 export const CVE_LOOKUP_DESCRIPTION = `
 Lookup vulnerability details using a CVE ID. 
 Use this when you have a specific CVE identifier and need to understand the threat level, technical details, and potential patches.
+`;
+
+export const DEPENDENCY_AUDIT_DESCRIPTION = `
+Audit project dependencies for known vulnerabilities using npm/yarn/bun audit.
+Use this to check for vulnerable packages in the project's supply chain.
+`;
+
+export const STATIC_ANALYSIS_DESCRIPTION = `
+Perform static code analysis to find common security anti-patterns like hardcoded secrets, eval() usage, or dangerous HTML rendering.
 `;
 
 /**
@@ -50,6 +61,16 @@ export function getToolRegistry(model: string): RegisteredTool[] {
       name: 'cve_lookup',
       tool: cveLookup,
       description: CVE_LOOKUP_DESCRIPTION,
+    },
+    {
+      name: 'dependency_audit',
+      tool: dependencyAudit,
+      description: DEPENDENCY_AUDIT_DESCRIPTION,
+    },
+    {
+      name: 'static_analysis',
+      tool: staticAnalysis,
+      description: STATIC_ANALYSIS_DESCRIPTION,
     },
     {
       name: 'browser',
