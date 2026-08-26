@@ -1,0 +1,12 @@
+{
+  "scan_interval_hours": 24,
+  "min_severity": "medium",
+  "auto_submit": false,
+  "programs": ["hackerone", "bugcrowd"],
+  "target_whitelist": [],
+  "max_concurrent_scans": 5,
+  "dedup_enabled": true,
+  "report_format": "markdown",
+  "scanner_timeout": 30,
+  "state_file": "./data/bug_bounty_state.json"
+}
